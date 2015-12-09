@@ -94,7 +94,8 @@ db.Character.findOne({name: "Arya Stark"}, function(err, arya_stark){
         console.log("Character Not Found");
         return;
     }
-    console.log(arya_stark)
+
+    // Then the show with the corresponding title
     db.Show.findOne({title: arya_stark.show}, function(err, show){
         if(err){
             console.log(err)
@@ -118,6 +119,7 @@ db.Character.findOne({name: "Arya Stark"}, function(err, arya_stark){
 Ouch! I'd have to find all the shows for a network, and then all the characters for each show! That's a ton of work!
 
 ```js
+// this is the most efficient way to do it. And it's not pretty!
 db.Show.aggregate([
     {
         $group: {
