@@ -19,7 +19,7 @@ var seed_actors = [
     { name: "Maisie Williams", year_of_birth: 1997, hometown: "Brisol, England, UK" }
 ];
 
-console.log(db)
+
 
 db.Show.remove({}, function(err){
   if (err) { console.log(err); return; }
