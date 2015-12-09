@@ -188,7 +188,6 @@ To achieve this goal, we need to embed the `CharacterSchema` inside our `ShowSch
 var ShowSchema = new mongoose.Schema({
   title: String,
   network: String,
-  season: Number,
   characters: [ CharacterSchema ]
 });
 ```
@@ -205,7 +204,6 @@ var CharacterSchema = require("./character.js").schema
 // var ShowSchema = new mongoose.Schema({
 //   title: String,
 //   network: String,
-//   season: Number,
 //   characters: [ CharacterSchema ]
 // });
 ```
