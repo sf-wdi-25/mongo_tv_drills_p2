@@ -71,8 +71,8 @@ var seed_characters = [
 ];
 
 var seed_shows = [
-    {title: "Game of Thrones", network: "HBO", season: 1},
-    {title: "True Detective", network: "HBO", season: 1}
+    {title: "Game of Thrones", network: "HBO"},
+    {title: "True Detective", network: "HBO"}
 ];
 ```
 
