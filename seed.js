@@ -20,25 +20,42 @@ var seed_actors = [
 ];
 
 
+
 db.Show.remove({}, function(err){
   if (err) { console.log(err); return; }
-  db.Show.create(seed_shows, function(err, shows){
+
+  db.Actor.remove({}, function(err){
     if (err) { console.log(err); return; }
 
-    // loop over the new shows
-    shows.forEach(function(show){
-      // seed the characters
-      seed_characters.forEach(function(character){
-        if (character.show === show.title) {
-          show.characters.push(character);
-        }
-      });
+    db.Actor.create(seed_actors, function(err, new_actors){
+      if (err) { console.log(err); return; }
 
-      // save the show (and all the characters in the show!)
-      show.save(function(err){
+      db.Show.create(seed_shows, function(err, shows){
         if (err) { console.log(err); return; }
-        console.log("Seeded", show.title, "with characters...")
-        console.log(show);
+
+        // loop over the new shows
+        shows.forEach(function(show){
+          // loop over seed_characters
+          seed_characters.forEach(function(character){
+            if (character.show === show.title) {
+              // add new_actor to seed_character
+              new_actors.forEach(function(new_actor){
+                if ( new_actor.name === character.actor_name ) {
+                  character.actor = new_actor;
+                }
+              })
+              // add seed_characters to show
+              show.characters.push(character);
+            }
+          });
+
+          // save the show (with all its characters!)
+          show.save(function(err){
+            if (err) { console.log(err); return; }
+            console.log("Seeded", show.title, "with characters...")
+            console.log(show);
+          });
+        });
       });
     });
   });

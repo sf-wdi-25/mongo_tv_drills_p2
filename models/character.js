@@ -3,8 +3,8 @@ var mongoose = require('mongoose'),
 
 var CharacterSchema = new Schema({
   name: String,
-  actor_name: String,
-  show: String
+  show: String,
+  actor: { type: Schema.Types.ObjectId, ref: 'Actor' }
 });
 
 var Character = mongoose.model('Character', CharacterSchema);
