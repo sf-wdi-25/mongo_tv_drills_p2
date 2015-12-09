@@ -1,8 +1,10 @@
 var mongoose = require('mongoose');
+var CharacterSchema = require("./character.js").schema;
 
 var ShowSchema = new mongoose.Schema({
   title: String,
-  network: Number
+  network: String,
+  characters: [ CharacterSchema ]
 });
 
 var Show = mongoose.model('Show', ShowSchema);
