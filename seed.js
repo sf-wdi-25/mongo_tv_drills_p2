@@ -20,20 +20,27 @@ var seed_actors = [
 ];
 
 
-
 db.Show.remove({}, function(err){
   if (err) { console.log(err); return; }
   db.Show.create(seed_shows, function(err, shows){
     if (err) { console.log(err); return; }
-    console.log("Seeded Shows:", shows);
-  });
-})
 
-db.Character.remove({}, function(err){
-  if (err) { console.log(err); return; }
-  db.Character.create(seed_characters, function(err, characters){
-    if (err) { console.log(err); return; }
-    console.log("Seeded Characters:", characters);
+    // loop over the new shows
+    shows.forEach(function(show){
+      // seed the characters
+      seed_characters.forEach(function(character){
+        if (character.show === show.title) {
+          show.characters.push(character);
+        }
+      });
+
+      // save the show (and all the characters in the show!)
+      show.save(function(err){
+        if (err) { console.log(err); return; }
+        console.log("Seeded", show.title, "with characters...")
+        console.log(show);
+      });
+    });
   });
-})
+});
 
