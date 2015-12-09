@@ -159,7 +159,7 @@ db.Show.aggregate([
 
 There must be a better way!
 
-#### 1.1 Embedded Characters Challenge: Shows have Characters
+#### 1.1 Embedded Characters Challenge: Shows have Characters - [solution](/mongo_tv_drills_p2/commit/19b918b3719febb4f5f4866e2b2fe1a453c767bb?diff=split)
 Life would be a lot easier if _characters_ "lived" inside of _shows_.
 
 For example, the show "Game of Thrones" might look something like this:
@@ -208,7 +208,7 @@ var CharacterSchema = require("./character.js").schema
 // });
 ```
 
-#### 1.2 Seeding Embedded Data
+#### 1.2 Seeding Embedded Data - [solution](/mongo_tv_drills_p2/commit/5a90ecc8e17ea8a9f355e20bd3e191c6bbf1ae65?diff=split)
 We've made an important change to the structure of our Show Schema. Before we can move on, we need to update our seed task.
 
 Recall that `characters` is an array. In plain old Javascript, if you want to add a value to an array, you use `push`. It turns out we can do the same thing in MongoDB:
