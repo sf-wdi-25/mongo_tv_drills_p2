@@ -157,7 +157,7 @@ db.Show.aggregate([
 
 There must be a better way!
 
-#### Embedded Characters Challenge: Shows have Characters
+#### 1.1 Embedded Characters Challenge: Shows have Characters
 Life would be a lot easier if _characters_ "lived" inside of _shows_.
 
 For example, the show "Game of Thrones" might look something like this:
@@ -208,7 +208,7 @@ var CharacterSchema = require("./character.js").schema
 // });
 ```
 
-#### Seeding Embedded Data
+#### 1.2 Seeding Embedded Data
 We've made an important change to the structure of our Show Schema. Before we can move on, we need to update our seed task.
 
 Recall that `characters` is an array. In plain old Javascript, if you want to add a value to an array, you use `push`. It turns out we can do the same thing in MongoDB:
@@ -239,15 +239,15 @@ db.Show.create(show_full_of_characters, function(show){
 
 For more hints, see [Working with Mongoose SubDocs](http://mongoosejs.com/docs/subdocs.html).
 
-#### Query Challenges
-1. Query all the shows on "HBO".
-2. Query all the characters in "True Detective".
-3. Stretch: Query all the characters on "HBO".
+#### 1.3 Query Challenges
+* Query all the shows on "HBO".
+* Query all the characters in "True Detective".
+* Stretch: Query all the characters on "HBO".
 
 ## Challenge 2: Actórs!
 We forgot about the actórs! The stars of the show!
 
-#### Actór Schema
+#### 2.1 Actór Schema
 Let's create a new `Actor` model that returns an object like:
 
 ``` js
@@ -269,7 +269,7 @@ var actors = [
 
 Make sure to update your seed task as well!
 
-#### Reference Challenge: Characters are played by Actors!
+#### 2.2 Reference Challenge: Characters are played by Actors!
 Suppose we wanted to find some information about the actor who plays "Maisie Williams". Right now that data lives in the actors "table", and it isn't connected to characters at all.
 
 Wouldn't it be great if you could do something like:
@@ -303,7 +303,7 @@ actor: { type: Schema.Types.ObjectId, ref: 'Actor' }
 2. Can you verify that the `_id` is pointing to the correct actor?
 3. Can you use the [mongoose `.populate()`](http://mongoosejs.com/docs/api.html#model_Model.populate) method so that instead of displaying an `_id` for `actor`, it actually displays the actor object there instead!
 
-#### Embedded Reference Challenge: Actors have roles!
+#### 2.3 Embedded Reference Challenge: Actors have roles!
 Shows have characters, but actors do too! They have "roles" or "characters" that they play.
 
 Ideally I'd be able to do something like this:
@@ -335,7 +335,7 @@ var actor = {
 
 Note that `roles` points to an array of `_ids`, specifically *character _ids*. How would you modify your `ActorSchema` to allow for this?
 
-## Conclusion
+## Recap / Questions
 1. Can you draw a picture of the database we've designed. How are our collections/models related (`Actor`, `Character`, `Show`).
 2. Is it easy to retrieve information from our database. For example, can I easily grab:
     * all the characters in a show
