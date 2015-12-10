@@ -4,6 +4,7 @@ var mongoose = require('mongoose'),
 var CharacterSchema = new Schema({
   name: String,
   show: String,
+  actor_name: String,
   actor: { type: Schema.Types.ObjectId, ref: 'Actor' }
 });
 
