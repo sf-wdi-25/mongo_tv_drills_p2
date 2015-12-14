@@ -25,21 +25,26 @@ var new_actors = seed_actors.map(function(a){
 });
 
 var new_characters = seed_characters.map(function(c){
-  return new db.Character(c);
+  var new_char = new db.Character(c);
+  new_char.set("actor_name", c.actor_name, {strict: false}); // temporary value
+  new_char.set("show_name", c.show, {strict: false}); // temporary value
+  return new_char;
 });
 
 var new_shows = seed_shows.map(function(s){
   var new_show = new db.Show(s);
   new_characters.forEach(function(new_char){
-    if ( new_show.title === new_char.show ) {
+    if ( new_show.title === new_char.get("show_name") ) {
       new_show.characters.push(new_char);
+      new_char.show = new_show;
 
-      new_char.actor = new_actors.filter(function(new_actor){
-        return new_actor.name === new_char.actor_name;
+      var actor = new_actors.filter(function(new_actor){
+        return new_actor.name === new_char.get("actor_name");
       })[0];
 
-      if (new_char.actor){
-        new_char.actor.roles.push(new_char);
+      if (actor){
+        new_char.actor = actor._id;
+        actor.roles.push(new_char);
       }
     }
 
@@ -50,81 +55,27 @@ var new_shows = seed_shows.map(function(s){
 db.Show.remove({}, function(err){
   if (err) { console.log(err); return; }
 
-  db.Actor.remove({}, function(err){
+  db.Character.remove({}, function(err){
     if (err) { console.log(err); return; }
 
-    db.Actor.create(new_actors, function(err, actors){
+    db.Actor.remove({}, function(err){
       if (err) { console.log(err); return; }
-      console.log("Seeded actors with roles");
-    });
 
-    db.Show.create(new_shows, function(err, shows){
-      if (err) { console.log(err); return; }
-      console.log("Seeded shows with characters");
-    });
+      db.Character.create(new_characters, function(err, characters){
+        if (err) { console.log(err); return; }
+        console.log("Seeded characters with actors");
+      })
 
+      db.Actor.create(new_actors, function(err, actors){
+        if (err) { console.log(err); return; }
+        console.log("Seeded actors with roles");
+      });
+
+      db.Show.create(new_shows, function(err, shows){
+        if (err) { console.log(err); return; }
+        console.log("Seeded shows with characters");
+      });
+
+    });
   });
 });
-
-// new_actors.save(function(err){
-// })
-
-// new_shows.save(function(err){
-// })
-
-
-// var new_shows = seed_shows.map(function(s){
-//   return new db.Show(s);
-// })
-
-// var new_actors = seed_actors.map(function(a){
-//   return new db.Actor(a);
-// });
-
-// db.Show.remove({}, function(err){
-//   if (err) { console.log(err); return; }
-
-//   db.Actor.remove({}, function(err){
-//     if (err) { console.log(err); return; }
-
-//     // loop over the new shows
-//     new_shows.forEach(function(new_show){
-//       // loop over seed_characters
-//       seed_characters.forEach(function(character){
-//         var new_character = new db.Character(character);
-//         if (new_character.show === new_show.title) {
-//           // add new actor to character, and new characters (roles) to actor
-//           new_actors.forEach(function(new_actor, i){
-//             if ( new_actor.name === new_character.actor_name ) {
-//               new_character.actor = new_actor;
-//               new_actor.roles.push(new_character);
-//               console.log(new_actor.name, "roles count:", new_actor.roles.length)
-//             }
-//           })
-//           // add seed_characters to show
-//           new_show.characters.push(character);
-//         }
-//       });
-
-//       // save the new show (with all its characters!)
-//       new_show.save(function(err){
-//         if (err) { console.log(err); return; }
-//         console.log("Seeded", new_show.title, "with characters...")
-//         console.log(new_show);
-//       });
-//     });
-
-//     // save the new actors (with all their characters!)
-//     new_actors.forEach(function(new_actor){
-//       if (err) { console.log(err); return; }
-//       console.log(new_actor.roles);
-//       new_actor.save(function(err){
-//         if (err) { console.log(err); return; }
-//         console.log("Seeded", new_actor.name, "with roles...");
-//         console.log(new_actor);
-//       });
-//     });
-
-//   });
-// });
-
