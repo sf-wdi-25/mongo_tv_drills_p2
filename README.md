@@ -303,6 +303,39 @@ actor: { type: Schema.Types.ObjectId, ref: 'Actor' }
 2. Can you verify that the `_id` is pointing to the correct actor?
 3. Can you use the [mongoose `.populate()`](http://mongoosejs.com/docs/api.html#model_Model.populate) method so that instead of displaying an `_id` for `actor`, it actually displays the actor object there instead!
 
+<detail>
+<summary>**How would you use `.populate` to replace an `actor _id` with the corresponding `actor`?** (click here)</summary>
+
+```js
+node
+>  var db = require("./models");
+>  db.Character.find({}).exec(function(err, characters){
+        console.log(characters);
+   })
+
+> // [{ _id: "111a111a111",
+  //  name: "Detective Rust Cohle",
+  //  show: "True Detective",
+  //  actor: "a3a3a3a3a3a" }]
+}
+
+>  db.Character.find({}).populate("actor").exec(function(err, characters){
+        console.log(characters);
+   })
+
+> // [{ _id: "111a111a111",
+  //  name: "Detective Rust Cohle",
+  //  show: "True Detective",
+  //  actor: {  _id: "a3a3a3a3a3a",
+  //            name: "Matthew McConaughey",
+  //            year_of_birth: 1969,
+  //            hometown: "Uvalde, Texas, USA" }
+  //  }]
+```
+
+</detail>
+
+
 #### 2.3 Embedded Reference Challenge: Actors have roles!
 Shows have characters, but actors do too! They have "roles" or "characters" that they play.
 
@@ -338,7 +371,7 @@ Note that `roles` points to an array of `_ids`, specifically *character _ids*. H
 #### 2.4 N:N Characters "join" table
 We can think of our database as having a many-to-many structure at this point. A Show has many Actors. An Actors has many Shows. The thing that connects them is the `Characters` "table". This is referred to as a "join" and generally has the following structure:
 
-```
+```js
 var show = {
     _id: "333222111"
 }
@@ -357,7 +390,7 @@ var actor = {
 As a final modification, it would be helpful to embed an _array of references_ in both `Show` and `Actor`, pointing to `Character`. That way we know, at a glance, all the characters that belong to a show, and all the characters that belong to an actor (otherwise we'd have to have a more complex query).
 
 
-```
+```js
 var show = {
     _id: "333222111",
     characters: ["ccc111ccc111", "ddd222ddd222"]
