@@ -310,7 +310,7 @@ Ideally I'd be able to do something like this:
 
 ```js
 actor.roles[0]._id // "111a111a111"
-show.characters[1].name // "111a111a111"
+show.characters[1]._id // "111a111a111"
 ```
 
 In other words, both the `show` and the `actor` are pointing to the same `character` in the database!
@@ -334,6 +334,48 @@ var actor = {
 ```
 
 Note that `roles` points to an array of `_ids`, specifically *character _ids*. How would you modify your `ActorSchema` to allow for this?
+
+#### 2.4 N:N Characters "join" table
+We can think of our database as having a many-to-many structure at this point. A Show has many Actors. An Actors has many Shows. The thing that connects them is the `Characters` "table". This is referred to as a "join" and generally has the following structure:
+
+```
+var show = {
+    _id: "333222111"
+}
+
+var character = {
+    show: "333222111",
+    actor: "bbbcccaaa"
+}
+
+var actor = {
+    _id: "bbbcccaaa"
+}
+```
+
+
+As a final modification, it would be helpful to embed an _array of references_ in both `Show` and `Actor`, pointing to `Character`. That way we know, at a glance, all the characters that belong to a show, and all the characters that belong to an actor (otherwise we'd have to have a more complex query).
+
+
+```
+var show = {
+    _id: "333222111",
+    characters: ["ccc111ccc111", "ddd222ddd222"]
+}
+
+var character = {
+    show: "333222111",
+    actor: "bbbcccaaa"
+}
+
+var actor = {
+    _id: "bbbcccaaa",
+    characters: ["ccc111ccc111"]
+}
+```
+
+That's it for now! How you choose to structure your database is entirely up to you. Just keep in mind _ease of access_. How are you actually going to use your data? Is it easy to _retrieve_?
+
 
 ## Recap / Questions
 1. Can you draw a picture of the database we've designed. How are our collections/models related (`Actor`, `Character`, `Show`).
